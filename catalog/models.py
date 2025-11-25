@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 from users.models import User
 
 
@@ -25,9 +24,15 @@ class Product(models.Model):
     price = models.IntegerField(verbose_name='Цена за покупку')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата последнего изменения')
-    is_published = models.BooleanField(default=False, null=True, blank=True)
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='users', null=True, blank=True,
-                              verbose_name='Владелец опубликованного продукта')
+    is_published = models.BooleanField(default=False, verbose_name='Опубликован')
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name='products',        # <- лучшее имя
+        null=True,
+        blank=True,
+        verbose_name='Владелец'
+    )
 
     def __str__(self):
         return f'Продукт:{self.name}, категория:{self.category}'
